@@ -21,13 +21,16 @@ exports.sendOtp = async (req, res) => {
 
     await Otp.deleteMany({ sendBy: email });
 
-    await Otp.create({ sendBy: email, otp });
+    const newOtp = await Otp.create({ sendBy: email, otp });
 
-    console.log("OTP:", otp);
+    console.log("Saved OTP Document:", newOtp);
 
     res.status(200).json({ message: "OTP sent successfully" });
 
+    
+
   } catch (err) {
+    console.log("ERROR:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
