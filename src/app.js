@@ -33,7 +33,10 @@ app.use(cookieParser());
 
 // ✅ Routes
 const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes"); 
+
 app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes); 
 
 // ✅ Test Route
 app.get("/", (req, res) => {
