@@ -30,8 +30,7 @@ exports.sendOtp = async (req, res) => {
     
 
   } catch (err) {
-    console.log("ERROR:", err);
-    res.status(500).json({ message: "Server error", error: err.message });
+  
   }
 };
 
@@ -123,6 +122,8 @@ exports.signup = async (req, res) => {
       mobile,
       isemailverified: true
     });
+    const checkUser = await User.findById(newUser._id);
+console.log("User fetched after save:", checkUser);
 
     res.status(201).json({
       message: "Signup successful",

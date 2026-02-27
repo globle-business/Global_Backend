@@ -9,6 +9,9 @@ const connectDB = async () => {
     console.log("Database connection failed ❌", error);
     process.exit(1);
   }
+
+  console.log("Full URI:", process.env.MONGO_URI);
+console.log("Connected DB:", mongoose.connection.name);
 };
 
 module.exports = connectDB;

@@ -18,6 +18,6 @@ router.post("/signup", signup);
 router.post("/login", login);
 
 // ✅ PROTECTED ROUTE all user
-router.get("/users", authenticate, getAllUser);
+router.get("/users",  getAllUser);
 
 module.exports = router;
