@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
+// ✅ FIRST create app
 const app = express();
 
 // ✅ Allowed origins (local + deployed frontend)
@@ -31,12 +32,15 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// ✅ Routes
+// ✅ Import routes AFTER app created
 const authRoutes = require("./routes/authRoutes");
-const userRoutes = require("./routes/userRoutes"); 
+const userRoutes = require("./routes/userRoutes");
+const enquiryRoutes = require("./routes/enquiryRoutes");
 
+// ✅ Use routes
 app.use("/api/auth", authRoutes);
-app.use("/api/user", userRoutes); 
+app.use("/api/user", userRoutes);
+app.use("/api/enquiry", enquiryRoutes);
 
 // ✅ Test Route
 app.get("/", (req, res) => {

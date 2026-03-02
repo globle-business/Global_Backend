@@ -1,5 +1,5 @@
-const User = require("../models/Usermodel");
-const Otp = require("../models/otpmodel");
+const User = require("../models/UserModel");
+const Otp = require("../models/otpModel");
 const bcrypt = require("bcryptjs");
 const { generateAccessToken, generateRefreshToken } = require("../utils/token");
 
