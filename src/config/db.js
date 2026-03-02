@@ -10,8 +10,8 @@ const connectDB = async () => {
     process.exit(1);
   }
 
-  console.log("Full URI:", process.env.MONGO_URI);
-console.log("Connected DB:", mongoose.connection.name);
+//   console.log("Full URI:", process.env.MONGO_URI);
+// console.log("Connected DB:", mongoose.connection.name);
 };
 
 module.exports = connectDB;
