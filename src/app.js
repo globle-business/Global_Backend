@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 // ✅ FIRST create app
 const app = express();
 
-// ✅ Allowed origins (local + deployed frontend)
+// ✅ Allowed origins
 const allowedOrigins = [
   "http://localhost:5173",
   "https://react-vite-lyart-phi.vercel.app"
@@ -15,7 +15,6 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (Postman, mobile apps)
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
@@ -32,15 +31,17 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// ✅ Import routes AFTER app created
+// ✅ Import routes
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const enquiryRoutes = require("./routes/enquiryRoutes");
 
-// ✅ Use routes
+// ✅ Use routes (UPDATED 🔥)
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/enquiry", enquiryRoutes);
+
+// 🔥 CHANGE THIS LINE
+app.use("/api/v1/loan-enquiries", enquiryRoutes);
 
 // ✅ Test Route
 app.get("/", (req, res) => {

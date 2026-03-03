@@ -3,10 +3,10 @@ const Enquiry = require("../models/EnquiryModel");
 /* ================= CREATE ENQUIRY ================= */
 exports.createEnquiry = async (req, res) => {
   try {
-    const { name, email, mobile, enquiryId } = req.body;
+    const { fullName, email, mobileNumber, state, zipCode } = req.body;
 
     // validation
-    if (!name || !email || !mobile || !enquiryId) {
+    if (!fullName || !email || !mobileNumber || !state || !zipCode) {
       return res.status(400).json({
         message: "All fields are required"
       });
@@ -22,28 +22,22 @@ exports.createEnquiry = async (req, res) => {
 
     // mobile validation
     const mobilePattern = /^[6-9]\d{9}$/;
-    if (!mobilePattern.test(mobile)) {
+    if (!mobilePattern.test(mobileNumber)) {
       return res.status(400).json({
         message: "Invalid mobile number"
       });
     }
 
-    // check duplicate enquiryId
-    const existing = await Enquiry.findOne({ enquiryId });
-    if (existing) {
-      return res.status(409).json({
-        message: "Enquiry ID already exists"
-      });
-    }
-
     const enquiry = await Enquiry.create({
-      name,
+      fullName,
       email,
-      mobile,
-      enquiryId
+      mobileNumber,
+      state,
+      zipCode
     });
 
     res.status(201).json({
+      success: true,
       message: "Enquiry created successfully",
       enquiry
     });
@@ -59,9 +53,10 @@ exports.createEnquiry = async (req, res) => {
 /* ================= GET ALL ENQUIRIES ================= */
 exports.getAllEnquiries = async (req, res) => {
   try {
-    const enquiries = await Enquiry.find();
+    const enquiries = await Enquiry.find({ isDeleted: false });
 
     res.status(200).json({
+      success: true,
       message: "Enquiries fetched successfully",
       total: enquiries.length,
       enquiries
@@ -77,17 +72,16 @@ exports.getAllEnquiries = async (req, res) => {
 /* ================= GET SINGLE ENQUIRY ================= */
 exports.getSingleEnquiry = async (req, res) => {
   try {
-    const enquiry = await Enquiry.findOne({
-      enquiryId: req.params.enquiryId
-    });
+    const enquiry = await Enquiry.findById(req.params.id);
 
-    if (!enquiry) {
+    if (!enquiry || enquiry.isDeleted) {
       return res.status(404).json({
         message: "Enquiry not found"
       });
     }
 
     res.status(200).json({
+      success: true,
       message: "Enquiry fetched successfully",
       enquiry
     });
@@ -99,12 +93,16 @@ exports.getSingleEnquiry = async (req, res) => {
   }
 };
 
-/* ================= DELETE ENQUIRY ================= */
+/* ================= SOFT DELETE ================= */
 exports.deleteEnquiry = async (req, res) => {
   try {
-    const enquiry = await Enquiry.findOneAndDelete({
-      enquiryId: req.params.enquiryId
-    });
+    const { id } = req.params;
+
+    const enquiry = await Enquiry.findByIdAndUpdate(
+      id,
+      { isDeleted: true },
+      { new: true }
+    );
 
     if (!enquiry) {
       return res.status(404).json({
@@ -113,12 +111,14 @@ exports.deleteEnquiry = async (req, res) => {
     }
 
     res.status(200).json({
-      message: "Enquiry deleted successfully"
+      success: true,
+      message: "Enquiry deleted Successfully"
     });
 
   } catch (error) {
     res.status(500).json({
-      message: "Internal Server Error"
+      message: "Internal Server Error",
+      error: error.message
     });
   }
 };

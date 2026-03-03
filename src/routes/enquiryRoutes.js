@@ -8,16 +8,12 @@ const {
   deleteEnquiry
 } = require("../controllers/enquiryController");
 
-// create enquiry
-router.post("/create", createEnquiry);
+// 🔹 USER
+router.post("/", createEnquiry);         // create enquiry
+router.get("/", getAllEnquiries);        // get all
 
-// get all enquiries
-router.get("/", getAllEnquiries);
-
-// get single enquiry by enquiryId
-router.get("/:enquiryId", getSingleEnquiry);
-
-// delete enquiry
-router.delete("/:enquiryId", deleteEnquiry);
+// 🔹 ADMIN / DETAILS
+router.get("/:id", getSingleEnquiry);    // get single by ID
+router.delete("/:id", deleteEnquiry);    // soft delete
 
 module.exports = router;
